@@ -9,4 +9,11 @@ config ZMK_KEYBOARD_NAME
 config ZMK_SLEEP
     depends on ZMK_BOARD_PILLBUG
 
+if ZMK_BACKLIGHT
+
+config LED_GPIO
+    default y
+
+endif
+
 endif

@@ -10,6 +10,7 @@
     chosen {
         zmk,kscan = &kscan0;
         zmk,matrix_transform = &split_space;
+        zmk,backlight = &gpio_backlight;
     };
 
     kscan0: kscan {
@@ -76,5 +77,19 @@
         triggers-per-rotation = <20>;
     };
 
-// LEDS from bottom to top are 46, 45, 43
+    gpio_backlight: gpioleds {
+        compatible = "gpio-leds";
+        gpio_led_0 {
+            gpios = <&blackpill 43 GPIO_ACTIVE_HIGH>;
+            label = "Top Indicator";
+        };
+        gpio_led_1 {
+            gpios = <&blackpill 45 GPIO_ACTIVE_HIGH>;
+            label = "Middle Indicator";
+        };
+        gpio_led_2 {
+            gpios = <&blackpill 46 GPIO_ACTIVE_HIGH>;
+            label = "Bottom Indicator";
+        };
+    };
 };

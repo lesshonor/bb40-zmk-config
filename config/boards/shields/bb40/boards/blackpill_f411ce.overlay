@@ -1,0 +1,10 @@
+/*
+ * Copyright (c) 2023 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+/ {
+// Delete the user LED to prevent it from lighting.
+      /delete-node/ user_led;
+};
