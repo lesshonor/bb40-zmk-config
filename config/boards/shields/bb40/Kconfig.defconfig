@@ -11,8 +11,14 @@ config ZMK_SLEEP
 
 if ZMK_BACKLIGHT
 
+config PWM
+    default y if DT_HAS_PWM_LEDS_ENABLED
+
+config LED_PWM
+    default y if DT_HAS_PWM_LEDS_ENABLED
+
 config LED_GPIO
-    default y
+    default n if DT_HAS_PWM_LEDS_ENABLED
 
 endif
 

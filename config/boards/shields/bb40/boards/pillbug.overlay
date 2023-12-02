@@ -5,6 +5,54 @@
  */
 
 / {
-    // Delete the user LED to prevent it from lighting.
+    // Delete the existing GPIO LEDs.
+    /delete-node/ gpioleds;
     /delete-node/ blue_led;
+};
+
+&pinctrl {
+    pwm0_default: pwm0_default {
+        group1 {
+            psels = <NRF_PSEL(PWM_OUT0, 0, 15)>,
+                    <NRF_PSEL(PWM_OUT1, 0, 17)>,
+                    <NRF_PSEL(PWM_OUT2, 0, 24)>;
+        };
+    };
+    pwm0_sleep: pwm0_sleep {
+        group1 {
+            psels = <NRF_PSEL(PWM_OUT0, 0, 15)>,
+                    <NRF_PSEL(PWM_OUT1, 0, 17)>,
+                    <NRF_PSEL(PWM_OUT2, 0, 24)>;
+            low-power-enable;
+        };
+    };
+};
+
+&pwm0 {
+    status = "okay";
+    pinctrl-0 = <&pwm0_default>;
+    pinctrl-1 = <&pwm0_sleep>;
+    pinctrl-names = "default", "sleep";
+};
+
+/ {
+    chosen {
+        zmk,backlight = &pwm_backlight;
+    };
+
+    pwm_backlight: pwmleds {
+        compatible = "pwm-leds";
+        top_led: pwm_led_0 {
+            pwms = <&pwm0 0 PWM_USEC(100) PWM_POLARITY_NORMAL>;
+            label = "Top Indicator";
+        };
+        middle_led: pwm_led_1 {
+            pwms = <&pwm0 1 PWM_USEC(100) PWM_POLARITY_NORMAL>;
+            label = "Middle Indicator";
+        };
+        bottom_led: pwm_led_2 {
+            pwms = <&pwm0 2 PWM_USEC(100) PWM_POLARITY_NORMAL>;
+            label = "Bottom Indicator";
+        };
+    };
 };
