@@ -5,6 +5,44 @@
  */
 
 / {
-// Delete the user LED to prevent it from lighting.
-      /delete-node/ user_led;
+    // Delete the existing GPIO LEDs.
+    /delete-node/ gpioleds;
+//  /delete-node/ leds;
+};
+
+&i2c1 {
+	status = "disabled";
+};
+
+&timers4 {
+	status = "okay";
+
+	pwm4: pwm {
+		status = "okay";
+		pinctrl-0 = <&tim4_ch2_pb7 &tim4_ch3_pb8 &tim4_ch4_pb9>;
+		pinctrl-names = "default";
+	};
+};
+
+/ {
+    chosen {
+        zmk,backlight = &pwm_backlight;
+    };
+
+    pwm_backlight: pwmleds {
+        compatible = "pwm-leds";
+        // Note: You cannot use PWM_MSEC here. It will fail silently.
+        top_led: pwm_led_0 {
+            pwms = <&pwm4 2 PWM_USEC(100) PWM_POLARITY_NORMAL>;
+            label = "Top Indicator";
+        };
+        middle_led: pwm_led_1 {
+            pwms = <&pwm4 3 PWM_USEC(100) PWM_POLARITY_NORMAL>;
+            label = "Middle Indicator";
+        };
+        bottom_led: pwm_led_2 {
+            pwms = <&pwm4 4 PWM_USEC(100) PWM_POLARITY_NORMAL>;
+            label = "Bottom Indicator";
+        };
+    };
 };
